@@ -1,0 +1,3 @@
+.gitignore
+
+: scratch.hs |> ghc --make scratch |> scratch scratch.hi scratch.o

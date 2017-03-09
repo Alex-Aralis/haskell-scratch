@@ -1,11 +1,7 @@
-hailstone :: Integer -> Integer
-hailstone n
-  | n `mod` 2 == 0 = n `div` 2
-  | otherwise      = 3*n + 1
+zip' :: [a] -> [b] -> [(a,b)]
 
-hailstoneSeq :: Integer -> [Integer]
+zip' [] ys = []
+zip' xs [] = []
+zip' (x:xs) (y:ys) = (x, y) : zip' xs ys
 
-hailstoneSeq 1 = [1]
-hailstoneSeq n = n : hailstoneSeq (hailstone n)
-
-main = (putStrLn . show) (hailstoneSeq 5)
+main = (putStrLn . show) (zip' [1,2,3,4,5] ['a', 'b', 'c', 'd'])

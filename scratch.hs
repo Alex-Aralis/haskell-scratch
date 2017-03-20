@@ -1,8 +1,9 @@
 qs :: Ord a => [a] -> [a]
 
+
 qs [] = []
 qs (x:xs) = 
-  let split [] n = ([], [])
+  let split [] _ = ([], [])
       split (y:ys) n
         | y <= n    = (y:lt, gt)
         | otherwise = (lt, y:gt)
@@ -10,4 +11,4 @@ qs (x:xs) =
       (lt, gt) = split xs x
   in (qs lt) ++ [x] ++ (qs gt)
 
-main = (putStrLn . show) (qs [3, 1, 5, 34, 2312, 1, 9])
+main = (putStrLn . show) (qs "this is also a list of ordered values")

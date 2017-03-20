@@ -1,14 +1,5 @@
-qs :: Ord a => [a] -> [a]
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
 
+zipWith' f xs ys = [ f x y | (x, y) <- zip xs ys ]
 
-qs [] = []
-qs (x:xs) = 
-  let split [] _ = ([], [])
-      split (y:ys) n
-        | y <= n    = (y:lt, gt)
-        | otherwise = (lt, y:gt)
-        where (lt, gt) = split ys n
-      (lt, gt) = split xs x
-  in (qs lt) ++ [x] ++ (qs gt)
-
-main = (putStrLn . show) (qs "this is also a list of ordered values")
+main = (putStrLn . show) (zipWith' (+) [1,2,3] [23,1,4])

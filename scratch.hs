@@ -1,7 +1,6 @@
 zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
 
-zipWith' f (x:xs) (y:ys) = (f x y):(zipWith' f xs ys)
-zipWith' _ [] _ = []
-zipWith' _ _ [] = []
+zipWith' f xs ys = map (applyTuple f) (zip xs ys)
+  where applyTuple f (x, y) = f x y
 
 main = (putStrLn . show) (zipWith' (+) [1,2,3] [23,1,4])

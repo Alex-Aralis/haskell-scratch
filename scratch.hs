@@ -1,5 +1,8 @@
-zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+head' :: [a] -> Maybe a
 
-zipWith' = \f -> \xs -> map (\(x, y) -> f x y) . zip xs
+head' [] = Nothing
+head' xs = Just $ head xs
 
-main = (putStrLn . show) (zipWith' (+) [1,2,3] [23,1,4])
+
+main = (putStrLn . show) (head' ([] :: [()]))
+

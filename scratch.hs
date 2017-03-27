@@ -1,15 +1,19 @@
-data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show, Read, Eq)
+infixr 5 :-:
+data Tree a = a :-: (Maybe (Tree a), Maybe (Tree a)) deriving (Show, Read, Eq)
 
+type MTree a = Maybe (Tree a)
 
-leaf :: a -> Tree a
-leaf a = Node a EmptyTree EmptyTree
+leaf :: a -> MTree a
+leaf a = Just $ a:-:(Nothing,Nothing)
 
-insert :: (Ord a) => a -> Tree a -> Tree a
-insert value EmptyTree = leaf value
-insert value node@(Node curr l r) = 
-  case value `compare` curr of
-    LT -> Node curr (insert value l) r
-    GT -> Node curr l (insert value r)
+infixr 5 -:-
+(-:-) :: (Ord a) => a -> MTree a -> MTree a
+(-:-) v Nothing = leaf v
+(-:-) v (Just node@(curr:-:(l,r))) = 
+  Just $ case v `compare` curr of
+    LT -> curr:-:(v-:-l,r)
+    GT -> curr:-:(l,v-:-r)
     EQ -> node
 
-main = putStrLn . show $ insert 1 $ insert 2 $ insert 3 EmptyTree
+
+main = putStrLn . show $ 2-:-1-:-3-:-Nothing

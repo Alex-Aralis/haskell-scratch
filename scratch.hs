@@ -23,6 +23,12 @@ treeElem v (Just (curr:-:(l,r))) =
     GT -> treeElem v r
     EQ -> True
 
-tree = 2-:-1-:-3-:-Nothing
+-- flip :: (a -> b -> c) -> b -> a -> c
+-- flip f y x = f x y
 
-main = putStrLn . show $ treeElem 5 tree 
+fromList :: (Ord a) => [a] -> MTree a
+fromList xs = foldl (flip (-:-)) Nothing xs
+
+tree = fromList [2,4,1,5,2]
+
+main = putStrLn . show $ tree 

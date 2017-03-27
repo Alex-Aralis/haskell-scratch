@@ -15,5 +15,14 @@ infixr 5 -:-
     GT -> curr:-:(l,v-:-r)
     EQ -> node
 
+treeElem :: (Ord a) => a -> MTree a -> Bool
+treeElem v Nothing = False
+treeElem v (Just (curr:-:(l,r))) =
+  case v `compare` curr of 
+    LT -> treeElem v l
+    GT -> treeElem v r
+    EQ -> True
 
-main = putStrLn . show $ 2-:-1-:-3-:-Nothing
+tree = 2-:-1-:-3-:-Nothing
+
+main = putStrLn . show $ treeElem 5 tree 

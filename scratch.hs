@@ -1,27 +1,15 @@
-import qualified Data.Map as Map
+data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show, Read, Eq)
 
-type Code = String
 
-data LockerState = Taken | Free deriving (Show, Eq)
+leaf :: a -> Tree a
+leaf a = Node a EmptyTree EmptyTree
 
-type LockerMap = Map.Map Integer (LockerState, Code)
-type Failure = String
+insert :: (Ord a) => a -> Tree a -> Tree a
+insert value EmptyTree = leaf value
+insert value node@(Node curr l r) = 
+  case value `compare` curr of
+    LT -> Node curr (insert value l) r
+    GT -> Node curr l (insert value r)
+    EQ -> node
 
-lookupLocker :: LockerMap -> Integer -> Either Failure Code
-lookupLocker lockerMap lockerNumber = 
-  case Map.lookup lockerNumber lockerMap of 
-    Nothing -> Left $ "Locker number " ++ show lockerNumber ++ " not found."
-    Just (state, code) -> if state == Free
-                          then Right code
-                          else Left $ "Locker number " ++ show lockerNumber ++ " is taken :(."
-
-lockers = Map.fromList
-  [(100,(Taken,"ZD39I"))  
-  ,(101,(Free,"JAH3I"))  
-  ,(103,(Free,"IQSA9"))  
-  ,(105,(Free,"QOTSA"))  
-  ,(109,(Taken,"893JJ"))  
-  ,(110,(Taken,"99292"))  
-  ] 
-
-main = putStrLn . show $ lookupLocker lockers 110 
+main = putStrLn . show $ insert 1 $ insert 2 $ insert 3 EmptyTree

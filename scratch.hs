@@ -3,18 +3,23 @@ data Tree a = EmptyTree
   | a :-: (Tree a, Tree a) 
   deriving (Read, Eq)
 
-treePrint :: (Show a) => String -> Tree a -> String
-treePrint _ EmptyTree = ""
-treePrint pad (c:-:(l,r)) = line ++ (treePrint nPad l) ++ (treePrint nPad r) 
-  where 
-        cStr = "-" ++ (show c) ++ "-"
-        cLen = length cStr
-        nPad = pad ++ (replicate cLen ' ') ++ "|" 
-        line = pad ++ cStr ++ "|\n"
+treePrint :: (Show a) => String -> String -> Tree a -> String
+treePrint _ _ EmptyTree = ""
 
+treePrint lpad rpad (c:-:(l,r)) = 
+  (treePrint llpad lrpad l) ++ line ++ (treePrint rlpad rrpad r) 
+  where cStr = "{ " ++ (show c) ++ " }"
+        cLen = length cStr
+        spacer = replicate cLen ' '
+        llpad = lpad ++ spacer ++ " "
+        lrpad = lpad ++ spacer ++ "|"
+        rlpad = rpad ++ spacer ++ "|"
+        rrpad = rpad ++ spacer ++ " "
+        line = (take ((length rpad) - 1) rpad) ++ "|" ++ cStr ++ "|\n"
+         
 instance (Show a) => Show (Tree a) where
   show EmptyTree = "()"
-  show tree = treePrint "" tree
+  show tree = treePrint "" "" tree
 
 leaf :: a -> Tree a
 leaf a = a:-:(EmptyTree,EmptyTree)
